@@ -1,9 +1,9 @@
-import { app, BrowserWindow } from "electron";
+import { app, BrowserWindow, ipcMain } from "electron";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import { captureScreen } from "./plugin/captureScreen";
 import { Escape } from "./plugin/Escape";
 import "./plugin/paddleOCR";
-import { createMainWin, createCaptureWins } from "./helper";
+import { createWin, createMainWin, createCaptureWins } from "./helper";
 
 process.env["ELECTRON_DISABLE_SECURITY_WARNINGS"] = "true";
 app.commandLine.appendSwitch("disable-web-security");
@@ -26,6 +26,16 @@ app.whenReady().then(() => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (BrowserWindow.getAllWindows().length === 0) createMainWin();
+  });
+
+  ipcMain.on("create-win", (e, params) => {
+    const win = createWin(params);
+    e.sender.send("create-win-success", win);
+  });
+
+  ipcMain.on("hide-win", (e, data) => {
+    console.log("hide-win", e, data);
+    BrowserWindow.fromWebContents(e.sender)?.hide();
   });
 });
 

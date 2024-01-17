@@ -17,28 +17,47 @@ export const captureScreen = async () => {
     const captureHeight = Math.floor(height * scaleFactor);
 
     // 获取桌面截图
-    desktopCapturer
+    const sources = await desktopCapturer
       .getSources({
         types: ["screen"],
         thumbnailSize: { width: captureWidth, height: captureHeight },
       })
       .then((sources) => {
-        const allWin = BrowserWindow.getAllWindows();
-        allWin.map((item) => {
-          if (item["tag"] === "captureWin") {
-            // console.log(item);
-            const currentDisplay = screen.getDisplayMatching(item.getBounds());
-            item.show();
-            item.webContents.send("screenshot", [
-              sources.find(
-                (item) => Number(item.display_id) === currentDisplay.id
-              ),
-            ]);
-          }
-        });
+        return sources;
       })
       .catch((error) => {
         console.error("获取桌面截图失败:", error);
       });
+
+    const curSource = sources?.find(
+      (item) => Number(item.display_id) === display.id
+    );
+    console.log(display);
+    const allWin = BrowserWindow.getAllWindows();
+    allWin.map((item) => {
+      if (item["tag"] === "captureWin") {
+        if (isWindowInScreen(item, display)) {
+          item.webContents.send("screenshot", [curSource]);
+          item.show();
+        } else {
+          item.hide();
+        }
+      }
+    });
   });
 };
+
+// 判断窗口是否在指定屏幕中
+function isWindowInScreen(window, targetScreen) {
+  const windowBounds = window.getBounds();
+  const targetBounds = targetScreen.bounds;
+  console.log(windowBounds, targetBounds);
+
+  return (
+    windowBounds.x >= targetBounds.x &&
+    windowBounds.x + windowBounds.width - 1 <=
+      targetBounds.x + targetBounds.width &&
+    windowBounds.y >= targetBounds.y &&
+    windowBounds.y + windowBounds.height <= targetBounds.y + targetBounds.height
+  );
+}

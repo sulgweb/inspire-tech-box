@@ -1,6 +1,6 @@
 import OCR from "paddleocrjson";
 import path from "path";
-import { ipcMain, ipcRenderer } from "electron";
+import { ipcMain } from "electron";
 
 class PaddleOCRServer {
   private static instance: PaddleOCRServer;
