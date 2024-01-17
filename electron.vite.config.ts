@@ -6,14 +6,14 @@ export default defineConfig({
     plugins: [externalizeDepsPlugin()],
   },
   preload: {
-    build: {
-      rollupOptions: {
-        input: {
-          home: resolve(__dirname, "src/preload/home.ts"),
-          captureWin: resolve(__dirname, "src/preload/captureWin.ts"),
-        },
-      },
-    },
+    // build: {
+    //   rollupOptions: {
+    //     input: {
+    //       home: resolve(__dirname, "src/preload/index.ts"),
+    //       captureWin: resolve(__dirname, "src/preload/index.ts"),
+    //     },
+    //   },
+    // },
     plugins: [externalizeDepsPlugin()],
   },
   renderer: {
@@ -22,14 +22,16 @@ export default defineConfig({
         input: {
           home: resolve(__dirname, "src/renderer/home/index.html"),
           captureWin: resolve(__dirname, "src/renderer/captureWin/index.html"),
+          floatWin: resolve(__dirname, "src/renderer/floatWin/index.html"),
         },
       },
     },
     resolve: {
       alias: {
-        "@renderer": resolve("src/renderer/src/pages"),
+        "@renderer": resolve("src/renderer"),
         "@home": resolve("src/renderer/home/src"),
         "@captureWin": resolve("src/renderer/captureWin/src"),
+        "@floatWin": resolve("src/renderer/floatWin/src"),
       },
     },
     plugins: [react()],
