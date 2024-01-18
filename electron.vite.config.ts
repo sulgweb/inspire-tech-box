@@ -20,7 +20,7 @@ export default defineConfig({
     build: {
       rollupOptions: {
         input: {
-          home: resolve(__dirname, "src/renderer/home/index.html"),
+          homeWin: resolve(__dirname, "src/renderer/homeWin/index.html"),
           captureWin: resolve(__dirname, "src/renderer/captureWin/index.html"),
           floatWin: resolve(__dirname, "src/renderer/floatWin/index.html"),
         },
@@ -29,7 +29,7 @@ export default defineConfig({
     resolve: {
       alias: {
         "@renderer": resolve("src/renderer"),
-        "@home": resolve("src/renderer/home/src"),
+        "@homeWin": resolve("src/renderer/homeWin/src"),
         "@captureWin": resolve("src/renderer/captureWin/src"),
         "@floatWin": resolve("src/renderer/floatWin/src"),
       },

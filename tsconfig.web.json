@@ -16,6 +16,12 @@
       ],
       "@captureWin/*": [
         "src/renderer/captureWin/src/*"
+      ],
+      "@floatWin/*":[
+        "src/renderer/floatWin/src/*"
+      ],
+      "@homeWin/*":[
+        "src/renderer/homeWin/src/*"
       ]
     }
   }
