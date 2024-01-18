@@ -1,7 +1,7 @@
 import React from "react";
 import { useEffect } from "react";
 import "./app.less";
-import ScreenShot from "js-web-screen-shot/dist/screenShotPlugin.esm";
+import ScreenShot from "js-web-screen-shot";
 
 function App() {
   const screenShotRef = React.useRef<ScreenShot>(null);
@@ -33,6 +33,7 @@ function App() {
               width: e.cutInfo.width,
               height: e.cutInfo.height,
               autoHideMenuBar: true,
+              alwaysOnTop: true,
               frame: false,
               transparent: true,
             },
