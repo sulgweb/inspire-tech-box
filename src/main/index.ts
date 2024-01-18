@@ -28,12 +28,24 @@ app.whenReady().then(() => {
     if (BrowserWindow.getAllWindows().length === 0) createMainWin();
   });
 
-  ipcMain.on("create-win", (e, params) => {
-    createWin(params);
+  ipcMain.on("create-win", (e, data) => {
+    createWin(data);
   });
 
   ipcMain.on("hide-win", (e, data) => {
     BrowserWindow.fromWebContents(e.sender)?.hide();
+  });
+
+  ipcMain.on("drag-win", (e, data) => {
+    BrowserWindow.fromWebContents(e.sender)?.setPosition(data.x, data.y);
+  });
+
+  ipcMain.handle("get-win-position", (e, data) => {
+    BrowserWindow.fromWebContents(e.sender)?.getPosition();
+  });
+
+  ipcMain.on("close-win", (e, data) => {
+    BrowserWindow.fromWebContents(e.sender)?.close();
   });
 });
 

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./app.less";
 import RenderOcrResult from "./components/RenderOrcResult";
+import { useElectronDrag } from "../../hooks/useElectronDrag";
 interface IOcrResult {
   box: number[][];
   score: number;
@@ -11,6 +12,8 @@ function App() {
   const [base64, setBase64] = useState<string>("");
   const [ocrResult, setOcrResult] = useState<IOcrResult[]>([]);
   const domRef = useRef<HTMLDivElement>(null);
+
+  useElectronDrag();
 
   const init = async () => {
     setTimeout(() => {

@@ -1,10 +1,9 @@
-import React from "react";
-import { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import "./app.less";
 import ScreenShot from "js-web-screen-shot";
 
 function App() {
-  const screenShotRef = React.useRef<ScreenShot>(null);
+  const screenShotRef = useRef(null);
   const init = async () => {
     console.log(window.electron);
     window.electron.ipcRenderer.on("screenshot", async (event, res) => {

@@ -9,6 +9,15 @@ const api = {
   hideWin: () => {
     ipcRenderer.send("hide-win");
   },
+  dragWin: (data) => {
+    ipcRenderer.send("drag-win", data);
+  },
+  getWinPosition: async () => {
+    return await ipcRenderer.invoke("get-win-position");
+  },
+  closeWin: () => {
+    ipcRenderer.send("close-win");
+  },
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
