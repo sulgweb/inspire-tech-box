@@ -7,6 +7,7 @@ import {
 import { join } from "path";
 import { is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
+import { showCustomMenu } from "./plugin/MenuManger";
 
 // 注入数据
 function InjectData(webContents, data) {
@@ -17,6 +18,13 @@ function InjectData(webContents, data) {
   });
 }
 
+const initWinUrl = (win, url) => {
+  if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
+    win.loadURL(`${process.env["ELECTRON_RENDERER_URL"]}${url}`);
+  } else {
+    win.loadFile(join(__dirname, `../renderer${url}`));
+  }
+};
 interface ICreateWin {
   config: BrowserWindowConstructorOptions;
   url: string;
@@ -37,11 +45,8 @@ export function createWin({
     },
   });
   InjectData(win.webContents, injectData);
-  if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-    win.loadURL(`${process.env["ELECTRON_RENDERER_URL"]}${url}`);
-  } else {
-    win.loadFile(join(__dirname, `../renderer${url}`));
-  }
+  showCustomMenu(win, ["destory", "reload", "ocr", "devTools"]);
+  initWinUrl(win, url);
   return win;
 }
 
@@ -63,18 +68,9 @@ export function createCaptureWins(): void {
       },
     });
     captureWin["tag"] = "captureWin";
-
-    if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-      captureWin.loadURL(
-        `${process.env["ELECTRON_RENDERER_URL"]}/captureWin/index.html`
-      );
-    } else {
-      captureWin.loadFile(join(__dirname, "../renderer/captureWin/index.html"));
-    }
+    initWinUrl(captureWin, "/captureWin/index.html");
+    showCustomMenu(captureWin);
     captureWin.on("ready-to-show", () => {
-      if (is.dev) {
-        captureWin.webContents.openDevTools();
-      }
       const windowBounds = captureWin.getBounds();
       captureWin.webContents.executeJavaScript(`
         window.windowBounds = ${JSON.stringify(windowBounds)};
@@ -101,20 +97,12 @@ export function createMainWin(): void {
   mainWindow["customId"] = "main";
   mainWindow.on("ready-to-show", () => {
     mainWindow.show();
-    if (is.dev) {
-      mainWindow.webContents.openDevTools();
-    }
+    showCustomMenu(mainWindow);
   });
 
   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url);
     return { action: "deny" };
   });
-  if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
-    mainWindow.loadURL(
-      `${process.env["ELECTRON_RENDERER_URL"]}/home/index.html`
-    );
-  } else {
-    mainWindow.loadFile(join(__dirname, "../renderer/home/index.html"));
-  }
+  initWinUrl(mainWindow, "/homeWin/index.html");
 }
