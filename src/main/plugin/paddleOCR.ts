@@ -32,10 +32,13 @@ class PaddleOCRServer {
 }
 ipcMain.on("screenshot-recognize", (e, data) => {
   paddleOCRServer.recognize(filterBase64Prefix(data.base64)).then((res) => {
-    console.log(res);
     e.reply("screenshot-recognize-result", res);
     // ipcMain.emit("screenshot-recognize-result", res);
   });
+});
+
+ipcMain.handle("ocr-base64-reply", (e, data) => {
+  return paddleOCRServer.recognize(filterBase64Prefix(data));
 });
 
 function filterBase64Prefix(str: string): string {

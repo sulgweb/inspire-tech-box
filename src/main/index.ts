@@ -29,12 +29,10 @@ app.whenReady().then(() => {
   });
 
   ipcMain.on("create-win", (e, params) => {
-    const win = createWin(params);
-    e.sender.send("create-win-success", win);
+    createWin(params);
   });
 
   ipcMain.on("hide-win", (e, data) => {
-    console.log("hide-win", e, data);
     BrowserWindow.fromWebContents(e.sender)?.hide();
   });
 });

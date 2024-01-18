@@ -32,7 +32,6 @@ export const captureScreen = async () => {
     const curSource = sources?.find(
       (item) => Number(item.display_id) === display.id
     );
-    console.log(display);
     const allWin = BrowserWindow.getAllWindows();
     allWin.map((item) => {
       if (item["tag"] === "captureWin") {
@@ -51,7 +50,6 @@ export const captureScreen = async () => {
 function isWindowInScreen(window, targetScreen) {
   const windowBounds = window.getBounds();
   const targetBounds = targetScreen.bounds;
-  console.log(windowBounds, targetBounds);
 
   return (
     windowBounds.x >= targetBounds.x &&
