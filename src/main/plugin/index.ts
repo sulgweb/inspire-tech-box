@@ -5,3 +5,4 @@ import "./modules/baseConfig";
 import "./modules/ipcWin";
 import "./modules/MenuManger";
 import "./modules/translate";
+import "./modules/store";

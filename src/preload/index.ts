@@ -18,6 +18,12 @@ const api = {
   closeWin: () => {
     ipcRenderer.send("close-win");
   },
+  setStore: (key, value) => {
+    ipcRenderer.send("set-store", key, value);
+  },
+  getStore: async (key) => {
+    return await ipcRenderer.invoke("get-store", key);
+  },
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

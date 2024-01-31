@@ -11,6 +11,12 @@ function App() {
     navigate("/setting");
   };
 
+  const testStore = async () => {
+    window.api.setStore("test", "1234");
+    const res = await window.api.getStore("test");
+    console.log(res);
+  };
+
   useEffect(() => {
     window.electron.ipcRenderer.on("screenshot", (event, res) => {
       console.log(res);
@@ -22,6 +28,7 @@ function App() {
     <div className="container">
       <div>test</div>
       <button onClick={getScreenShot}>截屏</button>
+      <button onClick={testStore}>test store</button>
       <button onClick={gotoSetting}>goto setting</button>
     </div>
   );
