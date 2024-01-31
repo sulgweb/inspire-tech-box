@@ -1,6 +1,10 @@
-import { globalShortcut, BrowserWindow } from "electron";
+import { app, globalShortcut, BrowserWindow } from "electron";
 
-export const Escape = () => {
+app.whenReady().then(() => {
+  escape();
+});
+
+const escape = () => {
   globalShortcut.register("Escape", () => {
     console.log("Escape is pressed");
     const allWin = BrowserWindow.getAllWindows();

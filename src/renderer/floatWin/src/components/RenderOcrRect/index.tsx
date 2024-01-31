@@ -15,7 +15,7 @@ export default function RenderOcrRect(props: IRenderOcrRectProps) {
       style={{
         left: `${coordinates[0][0]}px`, // 左上角x坐标
         top: `${coordinates[0][1]}px`, // 左上角y坐标
-        fontSize: `${(coordinates[3][1] as number) - (coordinates[0][1] as number)}px`,
+        fontSize: `${(coordinates[3][1] as number) - (coordinates[0][1] as number) - 2}px`,
       }}
     >
       {text}

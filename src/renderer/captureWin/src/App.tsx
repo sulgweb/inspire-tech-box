@@ -3,7 +3,7 @@ import "./app.less";
 import ScreenShot from "js-web-screen-shot";
 
 function App() {
-  const screenShotRef = useRef(null);
+  const screenShotRef = useRef<any>(null);
   const init = async () => {
     console.log(window.electron);
     window.electron.ipcRenderer.on("screenshot", async (event, res) => {
@@ -24,17 +24,18 @@ function App() {
         },
         completeCallback: (e) => {
           console.log(e);
-
+          const dpr = window.devicePixelRatio || 1;
           window.api.createWin({
             config: {
               x: window.windowBounds?.x + e.cutInfo.startX,
               y: window.windowBounds?.y + e.cutInfo.startY,
-              width: e.cutInfo.width,
-              height: e.cutInfo.height,
+              width: e.cutInfo.width * dpr,
+              height: e.cutInfo.height * dpr,
               autoHideMenuBar: true,
               alwaysOnTop: true,
               frame: false,
               transparent: true,
+              resizable: false,
             },
             url: "/floatWin/index.html",
             injectData: e,
@@ -58,7 +59,7 @@ function App() {
       screenShotRef.current = null;
     };
   }, []);
-  return <div className="capture-win">111</div>;
+  return <div className="capture-win" />;
 }
 
 export default App;

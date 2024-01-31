@@ -3,9 +3,14 @@ import {
   desktopCapturer,
   screen,
   BrowserWindow,
+  app,
 } from "electron";
 
-export const captureScreen = async () => {
+app.whenReady().then(() => {
+  captureScreen();
+});
+
+const captureScreen = () => {
   globalShortcut.register("F4", async () => {
     console.log("F4 is pressed");
     // 获取屏幕信息

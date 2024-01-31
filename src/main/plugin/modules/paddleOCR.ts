@@ -41,7 +41,7 @@ ipcMain.handle("ocr-base64-reply", (e, data) => {
   return paddleOCRServer.recognize(filterBase64Prefix(data));
 });
 
-function filterBase64Prefix(str: string): string {
+export function filterBase64Prefix(str: string): string {
   const regex = /^data:image\/[a-z]+;base64,/;
   return str.replace(regex, "");
 }

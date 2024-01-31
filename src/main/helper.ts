@@ -7,7 +7,7 @@ import {
 import { join } from "path";
 import { is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
-import { showCustomMenu } from "./plugin/MenuManger";
+import { showCustomMenu } from "./plugin/modules/MenuManger";
 
 // 注入数据
 function InjectData(webContents, data) {
@@ -18,13 +18,15 @@ function InjectData(webContents, data) {
   });
 }
 
-const initWinUrl = (win, url) => {
+// 加载的url
+const initWinUrl = (win: BrowserWindow, url: string) => {
   if (is.dev && process.env["ELECTRON_RENDERER_URL"]) {
     win.loadURL(`${process.env["ELECTRON_RENDERER_URL"]}${url}`);
   } else {
     win.loadFile(join(__dirname, `../renderer${url}`));
   }
 };
+
 interface ICreateWin {
   config: BrowserWindowConstructorOptions;
   url: string;
@@ -45,7 +47,7 @@ export function createWin({
     },
   });
   InjectData(win.webContents, injectData);
-  showCustomMenu(win, ["destory", "reload", "ocr", "devTools"]);
+  showCustomMenu(win, ["destory", "reload", "ocr", "translate", "devTools"]);
   initWinUrl(win, url);
   return win;
 }
@@ -61,6 +63,7 @@ export function createCaptureWins(): void {
       y: item.bounds.y,
       show: false,
       frame: false,
+      skipTaskbar: true,
       webPreferences: {
         nodeIntegration: true,
         webSecurity: false,

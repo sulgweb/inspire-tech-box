@@ -40,6 +40,15 @@ export class MenuManger {
   }
 }
 
+const createTranslateHandler =
+  (targetLang) => (menuItem, browserWindow, event) =>
+    handleTranslate({ menuItem, browserWindow, event, targetLang });
+
+const handleTranslate = (params) => {
+  const { menuItem, browserWindow, event, targetLang } = params;
+  browserWindow?.webContents?.send("ocr-translate", { targetLang });
+};
+
 const menuObj = {
   destory: new MenuItem({
     label: "销毁",
@@ -64,6 +73,35 @@ const menuObj = {
     click: (menuItem, browserWindow, event) => {
       browserWindow?.webContents?.openDevTools();
     },
+  }),
+  translate: new MenuItem({
+    label: "翻译为",
+    submenu: [
+      {
+        label: "中文",
+        click: createTranslateHandler("ZH"),
+      },
+      {
+        label: "English",
+        click: createTranslateHandler("EN"),
+      },
+      {
+        label: "Spanish",
+        click: createTranslateHandler("ES"),
+      },
+      {
+        label: "Français",
+        click: createTranslateHandler("FR"),
+      },
+      {
+        label: "日本語",
+        click: createTranslateHandler("JA"),
+      },
+      {
+        label: "Русский",
+        click: createTranslateHandler("RU"),
+      },
+    ],
   }),
 };
 

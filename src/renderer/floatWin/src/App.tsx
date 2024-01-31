@@ -11,45 +11,36 @@ interface IOcrResult {
 function App() {
   const [base64, setBase64] = useState<string>("");
   const [ocrResult, setOcrResult] = useState<IOcrResult[]>([]);
-  const domRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
 
-  useElectronDrag();
+  useElectronDrag(imgRef.current);
 
   const init = async () => {
     setTimeout(() => {
       setBase64(window.injectData.base64);
     }, 50);
   };
-
-  const addContentMenu = (e) => {
-    console.log("addContentMenu");
-    if (e.button === 2) {
-      e.preventDefault();
-      window.electron.ipcRenderer.send("context-menu");
-    }
-  };
   useEffect(() => {
     init();
-    // window.addEventListener("contextmenu", addContentMenu);
-    window.addEventListener("mouse", addContentMenu);
-    domRef.current?.addEventListener("mouse", addContentMenu);
-
     window.electron.ipcRenderer.on("ocr-base64", async (e) => {
       const res = await e.sender.invoke(
         "ocr-base64-reply",
         window.injectData.base64
       );
       setOcrResult(res.data);
-      console.log(res);
     });
 
-    // return () => {
-    //   window.removeEventListener("contextmenu", addContentMenu);
-    // };
+    window.electron.ipcRenderer.on("ocr-translate", async (e, data) => {
+      const res = await e.sender.invoke("ocr-translate-reply", {
+        ...data,
+        base64: window.injectData.base64,
+      });
+      console.log(res);
+    });
   }, []);
   return (
     <div className="float-win">
-      {base64 && <img src={base64} width="100%" height="100%" />}
+      {base64 && <img ref={imgRef} src={base64} width="100%" height="100%" />}
       {ocrResult?.length > 0 && <RenderOcrResult data={ocrResult} />}
     </div>
   );
